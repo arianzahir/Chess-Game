@@ -1,4 +1,5 @@
 import chess as ch
+import random as rd
 
 class Engine:
 
@@ -6,6 +7,25 @@ class Engine:
         self.board = board
         self.maxDepth = maxDepth
         self.color = color
+
+    def getBestMove(self):
+        return self.engine(None, 1)
+
+    def evalFunc(self):
+        compt = 0
+        #For 64 squares in a chess board
+        for i in range(64):
+            compt += self.sqaurePoints(ch.SQUARES[i])
+        compt += self.checkMate() +self.opening() + 0.001* rd.random()
+    
+    def opening(self):
+        if (self.board.fullmove_number < 10):
+            if (self.boad.turn == self.color):
+                return 1/10 * self.board.legal_moves.count()
+            else:
+                return -1/10 * self.board.legal_moves.count()
+        else:
+            return 0
 
     #If no legal moves, someone has lost
     def checkMate(self):
